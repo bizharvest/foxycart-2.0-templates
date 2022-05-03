@@ -18,7 +18,7 @@
     <![endif]-->
 
     {% for css_file_href in config.css_files %}
-    <link href="{{ css_file_href }}" rel="stylesheet" media="screen">
+        <link href="{{ css_file_href }}" rel="stylesheet" media="screen">
     {% endfor %}
 
     <!-- FC script insertion -->{{ fc_header_content|raw }}<!-- /FC script insertion -->
@@ -37,17 +37,32 @@
         </style>
     <![endif]-->
 
+    <style>
+        .genesource--message {
+            background: #d8e8c1;
+            padding: 1rem !important;
+            border-radius: 5px;
+        }
+    </style>
+
 </head>
 <body>
 <!-- has to be here because of chrome bug -->
-    {% include 'svg.inc.twig' %}
+{% include 'svg.inc.twig' %}
 
-    {% import "utils.inc.twig" as utils %}
-    {% embed 'checkout.inc.twig' %}
-    {% endembed %}
+{% import "utils.inc.twig" as utils %}
+{% embed 'checkout.inc.twig' %}
+    {% block noscript_warning %}
+        <div class="genesource--message">
+            <h2 style="margin-top:0; font-weight:bold;">A Note About Shipping</h2>
+            <strong>Shipping is not calculated at this time!</strong>
+            Once your order is confirmed by our staff, we will contact you with the cost of shipping and to process payment.</div>
+        {{ parent() }}
+    {% endblock %}
+{% endembed %}
 
-    <!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
-    <!--[if lt IE 10 ]>
+<!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
+<!--[if lt IE 10 ]>
         <script src="https://{{ config.store_domain }}/static/scripts/placeholder/placeholder_polyfill.jquery.js" charset="utf-8"></script>
     <![endif]-->
 </body>
