@@ -18,7 +18,7 @@
     <![endif]-->
 
     {% for css_file_href in config.css_files %}
-    <link href="{{ css_file_href }}" rel="stylesheet" media="screen">
+        <link href="{{ css_file_href }}" rel="stylesheet" media="screen">
     {% endfor %}
 
     <!-- FC script insertion -->{{ fc_header_content|raw }}<!-- /FC script insertion -->
@@ -40,14 +40,36 @@
 </head>
 <body>
 <!-- has to be here because of chrome bug -->
-    {% include 'svg.inc.twig' %}
+{% include 'svg.inc.twig' %}
 
-    {% import "utils.inc.twig" as utils %}
-    {% embed 'checkout.inc.twig' %}
-    {% endembed %}
+{% import "utils.inc.twig" as utils %}
+{% embed 'checkout.inc.twig' %}
+    {% block login_register %}
+        {% set break = false %}
+        {% set has_semen = false %}
+        {% for item in items if not break %}
+            {% if item.category == 'Bull Semen' %}
+                {% set has_semen = true %}
+                {% set break = true %}
+            {% endif %}
+        {% endfor %}
+        {% if has_semen %}
+            <fieldset id="fc-message">
+                <div class="col-12 alert alert-danger text-center">
+                    <h3 class="text-danger font-weight-bold">SHIPPERS AVAILABILITY MAY VARY<br />FOR SEMEN ORDERS</h3>
+                </div>
+            </fieldset>
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}
+    {% block payment_method %}
+        {% set purchase_order = "Pay by Check" %}
+        {{ parent() }}
+    {% endblock %}
+{% endembed %}
 
-    <!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
-    <!--[if lt IE 10 ]>
+<!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
+<!--[if lt IE 10 ]>
         <script src="https://{{ config.store_domain }}/static/scripts/placeholder/placeholder_polyfill.jquery.js" charset="utf-8"></script>
     <![endif]-->
 </body>

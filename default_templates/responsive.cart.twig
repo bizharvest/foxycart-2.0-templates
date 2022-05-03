@@ -34,14 +34,32 @@
 </head>
 <body class="fc-context--cart-fullpage" data-fc-context='{"cart_is_fullpage":true}'>
 
-    {% set cart_is_fullpage = true %}
-    <div data-fc-container="cart">
-        {% embed 'cart.inc.twig' %}
-        {% endembed %}
-    </div>
+{% set cart_is_fullpage = true %}
+<div data-fc-container="cart">
+    {% embed 'cart.inc.twig' %}
+        {% block cart_title %}
+            {{ parent() }}
+            {% set break = false %}
+            {% set has_semen = false %}
+            {% for item in items if not break %}
+                {% if item.category == 'Bull Semen' %}
+                    {% set has_semen = true %}
+                    {% set break = true %}
+                {% endif %}
+            {% endfor %}
+            {% if has_semen %}
+                <fieldset id="fc-message">
+                    <div class="col-12 alert alert-danger text-center">
+                        <h5 class="text-danger font-weight-bold">SHIPPERS AVAILABILITY MAY VARY FOR SEMEN ORDERS</h5>
+                    </div>
+                </fieldset>
+            {% endif %}
+        {% endblock %}
+    {% endembed %}
+</div>
 
 
 
-    <!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
+<!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
 </body>
 </html>

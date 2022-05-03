@@ -1,3 +1,8 @@
+{% if purchase_order %}
+    {% set custom_purchase_order_message = '<br><br><h4>PAY BY CHECK</h4><p><span style="text-decoration: underline;">Please send payment to</span>:<br />CK6 Consulting<br />358 Laguna Madre Rd.<br />Maxwell, NM 87728<br /><br /> <span style="color: red;">Note! You order will not ship until payment has cleared.</span></p>' %}
+    {% set custom_lang = config.lang|merge({ "receipt_message_order": config.lang.receipt_message_order ~ custom_purchase_order_message }) %}
+    {% set config = config|merge({"lang": custom_lang }) %}
+{% endif %}
 <!DOCTYPE html>
 <html id="fc">
 <head>
@@ -14,15 +19,15 @@
 </head>
 <body>
 <!-- has to be here because of chrome bug -->
-    {% include 'svg.inc.twig' %}
+{% include 'svg.inc.twig' %}
 
-    {% import "utils.inc.twig" as utils %}
-    {% embed 'receipt.inc.twig' %}
-    {% endembed %}
+{% import "utils.inc.twig" as utils %}
+{% embed 'receipt.inc.twig' %}
+{% endembed %}
 
-    <!--[if lt IE 9 ]>
+<!--[if lt IE 9 ]>
         <script src="{{ config.cdn_static_path }}scripts/respond/respond.1.4.2.js" charset="utf-8"></script>
     <![endif]-->
-    <!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
+<!-- FC footer script insertion -->{% include template_from_string(fc_footer_content) %}<!-- /FC footer scripts -->
 </body>
 </html>
