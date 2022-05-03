@@ -1,0 +1,297 @@
+<fieldset class="fc-address-entry">
+    <legend><span class="fc-section-counter"></span>
+    {% if address.address_name %}
+        {{ config.lang['cart_shipto'] }}{{ address.address_name }}
+    {% else %}
+        {{ config.lang['checkout_'~address.type~'_address'] }}
+    {% endif %}
+    </legend>
+
+    {% set show_first_name = true %}
+    {% set show_last_name = true %}
+    {% set first_name_optional_placeholder = '' %}
+    {% set last_name_optional_placeholder = '' %}
+    {% set first_name = config.template_config.custom_checkout_field_requirements['billing_first_name'] %}
+    {% set last_name = config.template_config.custom_checkout_field_requirements['billing_last_name'] %}
+    {% if address.type == 'billing' %}
+        {% set first_name_optional_placeholder = (first_name == 'optional') ? config.lang.checkout_optional : '' %}
+        {% set show_first_name = (first_name != 'hidden') %}
+        {% set last_name_optional_placeholder = (last_name == 'optional') ? config.lang.checkout_optional : '' %}
+        {% set show_last_name = (last_name != 'hidden') %}
+    {% endif %}
+
+    {% if show_first_name or show_last_name %}
+        {% set multiple_inline_css = 'fc-form-group--multiple-inline' %}
+        {% if not (show_first_name and show_last_name) %}
+            {% set multiple_inline_css = '' %}
+        {% endif %}
+
+    <div class="fc-form-group {{ multiple_inline_css }}">
+        {% set field_name = address.prefix~'_first_name' %}
+        {% set error_string = utils.get_error_string(field_name, messages.errors) %}
+        <label class="fc-container__grid--label--name fc-form-label">{{ config.lang.checkout_name|raw }}</label>
+        {% if show_first_name %}
+        <div class="fc-container__grid--input--first-name {% if error_string %}fc-alert-container--error{% endif %}" data-fc-error-for="{{ field_name }}" data-fc-error-class="fc-alert-container--error" >
+            <label for="{{ field_name }}" class="fc-form-label fc-form-label--{{ address.prefix }}-first-name">{{ config.lang.checkout_first_name|raw }}</label>
+            <input type="text"
+                id="{{ field_name }}"
+                name="{{ field_name }}"
+                value="{{ address.first_name }}"
+                placeholder="{{ config.lang.checkout_first_name }}{{ first_name_optional_placeholder }}"
+                autocomplete="{{ address.type }} given-name"
+                maxlength="50"
+                {% if first_name == 'required' %}data-fc-required{% endif %}
+                class="fc-form-control fc-form-control--{{ address.prefix }}-first-name" />
+        </div>
+        {% endif %}
+
+        {% if show_last_name %}
+        {% set field_name = address.prefix~"_last_name" %}
+        {% set error_string = utils.get_error_string(field_name, messages.errors) %}
+        <div class="fc-container__grid--input--last-name {% if error_string %}fc-alert-container--error{% endif %}" data-fc-error-for="{{ field_name }}" data-fc-error-class="fc-alert-container--error">
+            <label for="{{ field_name }}" class="fc-form-label fc-form-label--{{ address.prefix }}-last-name">{{ config.lang.checkout_last_name|raw }}</label>
+            <input type="text"
+                id="{{ field_name }}"
+                name="{{ field_name }}"
+                value="{{ address.last_name }}"
+                placeholder="{{ config.lang.checkout_last_name }}{{ last_name_optional_placeholder }}"
+                autocomplete="{{ address.type }} family-name"
+                maxlength="50"
+                {% if last_name == 'required' %}data-fc-required{% endif %}
+                class="fc-form-control fc-form-control--{{ address.prefix }}-last-name"/>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+    {% set phone = config.template_config.custom_checkout_field_requirements['billing_phone'] %}
+    {% set company = config.template_config.custom_checkout_field_requirements['billing_company'] %}
+
+    {% set phone_optional_placeholder = (phone == 'optional') ? config.lang.checkout_optional : '' %}
+    {% set company_optional_placeholder = (company == 'optional') ? config.lang.checkout_optional : '' %}
+
+    {% set multiple_inline_css = '' %}
+    {% if company != "hidden" and phone != "hidden" %}
+        {% set multiple_inline_css = 'fc-form-group--multiple-inline' %}
+    {% endif %}
+
+    {% if company != "hidden" or phone != "hidden" %}
+    <div class="fc-form-group fc-address-entry__phone-and-company-container {{ multiple_inline_css }}">
+        {% if company != "hidden" %}
+            {% set field_name = address.prefix~"_company" %}
+            {% set error_string = utils.get_error_string(field_name, messages.errors) %}
+            <div class="fc-container__grid--input--company {% if error_string %}fc-alert-container--error{% endif %}" data-fc-error-for="{{ field_name }}" data-fc-error-class="fc-alert-container--error">
+                <label for="{{ field_name }}" class="fc-form-label fc-form-label--{{ address.prefix }}-company">{{ config.lang.checkout_company|raw }}</label>
+                <input type="text"
+                    id="{{ field_name }}"
+                    name="{{ field_name }}"
+                    value="{{ address.company }}"
+                    placeholder="{{ config.lang.checkout_company }}{{ company_optional_placeholder }}"
+                    autocomplete="{{ address.type }} organization"
+                    maxlength="50"
+                    {% if company == 'required' %}data-fc-required{% endif %}
+                    class="fc-form-control fc-form-control--{{ address.prefix }}-company" />
+            </div>
+        {% endif %}
+
+        {% if phone != "hidden" %}
+            {% set field_name = address.prefix~"_phone" %}
+            {% set error_string = utils.get_error_string(field_name, messages.errors) %}
+            <div class="fc-container__grid--input--phone {% if error_string %}fc-alert-container--error{% endif %}" data-fc-error-for="{{ field_name }}" data-fc-error-class="fc-alert-container--error">
+                <label for="{{ field_name }}" class="fc-form-label fc-form-label--{{ address.prefix }}-phone">{{ config.lang.checkout_phone|raw }}</label>
+                <input type="text"
+                    id="{{ field_name }}"
+                    name="{{ field_name }}"
+                    value="{{ address.phone }}"
+                    placeholder="{{ config.lang.checkout_phone }}{{ phone_optional_placeholder }}"
+                    autocomplete="{{ address.type }} tel"
+                    maxlength="50"
+                    {% if phone == 'required' %}data-fc-required{% endif %}
+                    class="fc-form-control fc-form-control--{{ address.prefix }}-phone" />
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% set tax_id = config.template_config.custom_checkout_field_requirements['billing_tax_id'] %}
+    {% set tax_id_optional_placeholder = (tax_id == 'optional') ? config.lang.checkout_optional : '' %}
+
+    {% if tax_id != "hidden" %}
+        {% if (address.type == 'billing' and not shipping_address.has_shippable_products) or address.type == 'shipping' %}
+        <div class="fc-form-group fc-address-entry__tax-id-container">
+            {% set field_name = address.prefix~"_tax_id" %}
+            {% set error_string = utils.get_error_string(field_name, messages.errors) %}
+            <label class="fc-container__grid--label--tax-id fc-form-label">{{ config.lang.checkout_tax_id }}</label>
+            <div class="fc-container__grid--input--tax-id {% if error_string %}fc-alert-container--error{% endif %}" data-fc-error-for="{{ field_name }}" data-fc-error-class="fc-alert-container--error">
+                <label for="{{ field_name }}" class="fc-form-label fc-form-label--{{ address.prefix }}-tax-id">{{ config.lang.checkout_tax_id }}</label>
+                <input type="text"
+                    id="{{ field_name }}"
+                    name="{{ field_name }}"
+                    value="{{ address.tax_id }}"
+                    placeholder="{{ config.lang.checkout_tax_id }}{{ tax_id_optional_placeholder }}"
+                    autocomplete="{{ address.type }} organization"
+                     {% if tax_id == 'required' %}data-fc-required{% endif %}
+                    class="fc-form-control fc-form-control--{{ address.prefix }}-tax-id" />
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <input
+            id="{{ address.prefix }}_tax_id"
+            type="hidden"
+            name="{{ address.prefix }}_tax_id"
+            value="{{ address.tax_id }}"
+        />
+    {% endif %}
+
+    {% set show_address1 = true %}
+    {% set show_address2 = true %}
+
+    {% set address1 = config.template_config.custom_checkout_field_requirements['billing_address1'] %}
+    {% set address2 = config.template_config.custom_checkout_field_requirements['billing_address2'] %}
+    {% set address1_optional_placeholder = '' %}
+    {% set address2_optional_placeholder = (address2 == 'optional') ? config.lang.checkout_optional : '' %}
+
+    {% if address.type == 'billing' %}
+        {% set address1_optional_placeholder = (address1 == 'optional') ? config.lang.checkout_optional : '' %}
+        {% set show_address1 = (address1 != 'hidden') %}
+    {% endif %}
+    {% if address2 == "hidden" %}
+        {% set show_address2 = false %}
+    {% endif %}
+
+    {% if show_address1 or show_address2 %}
+        {% set multiple_inline_css = 'fc-form-group--multiple-inline' %}
+        {% if not (show_address1 and show_address2) %}
+            {% set multiple_inline_css = '' %}
+        {% endif %}
+    <div class="fc-form-group fc-address-entry__address-container {{ multiple_inline_css }}">
+
+        <label class="fc-form-label fc-form-label--{{ address.prefix }}-address1 fc-container__grid--label--address">{{ config.lang.checkout_address|raw }}</label>
+        {% if show_address1 %}
+        {% set field_name = address.prefix~"_address1" %}
+        {% set error_string = utils.get_error_string(field_name, messages.errors) %}
+        <div class="fc-container__grid--input--address1 {% if error_string %}fc-alert-container--error{% endif %}" data-fc-error-for="{{ field_name }}" data-fc-error-class="fc-alert-container--error">
+            <label for="{{ field_name }}" class="fc-form-label fc-form-label--{{ address.prefix }}-address1">{{ config.lang.checkout_address|raw }} 1</label>
+            <input type="text"
+                id="{{ field_name }}"
+                name="{{ field_name }}"
+                value="{{ address.address1 }}"
+                placeholder="{{ config.lang.checkout_address1 }}{{ address1_optional_placeholder }}"
+                autocomplete="{{ address.type }} address-line1"
+                maxlength="100"
+                {% if address1 == 'required' %}data-fc-required{% endif %}
+                class="fc-form-control fc-form-control--{{ address.prefix }}-address1" />
+        </div>
+        {% endif %}
+
+
+        {% if show_address2 %}
+        {% set field_name = address.prefix~"_address2" %}
+        {% set error_string = utils.get_error_string(field_name, messages.errors) %}
+        <div class="fc-container__grid--label--address2 {% if error_string %}fc-alert-container--error{% endif %}" data-fc-error-for="{{ field_name }}" data-fc-error-class="fc-alert-container--error">
+            <label for="{{ field_name }}" class="fc-form-label fc-form-label--{{ address.prefix }}-address1">{{ config.lang.checkout_address|raw }} 2</label>
+            <input type="text"
+                id="{{ field_name }}"
+                name="{{ field_name }}"
+                value="{{ address.address2 }}"
+                placeholder="{{ config.lang.checkout_address2 }}{{ address2_optional_placeholder }}"
+                autocomplete="{{ address.type }} address-line2"
+                maxlength="100"
+                {% if address2 == 'required' %}data-fc-required{% endif %}
+                class="fc-form-control fc-form-control--{{ address.prefix }}-address2" />
+        </div>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+    {# The following includes the postalcode, city+state, and country inputs. #}
+    <div class="fc-form-group fc-form-group--postal-code">
+        <div class="fc-container-checkout__grid--postal-code">
+            {% include 'postal_code.inc.twig' %}
+        </div>
+    </div>
+
+    {% if address.type == 'shipping' and has_multiship %}
+        <div data-fc-id="block-{{ address.prefix }}-results" class="fc-shipping-results">
+        {% if address.shipping_results|length > 0 %}
+        <div class="fc-shipping-results__header">
+            <h4>{{ config.lang.checkout_shipping_methods_for|raw }} {{ address.address_name }}</h4>
+        </div>
+        {% endif %}
+        {% if address.loading_shipping_results %}
+            <div class="fc-spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+        {% endif %}
+        {% if address.shipping_results|length > 0 %}
+            {{ utils.shipping_results(address, 'fc-input-group--full-page', messages.errors, config.lang) }}
+        {% elseif address.loading_shipping_results == false %}
+            <h5 class="fc_checkout__shipping-results__help-text">{{ config.lang.checkout_update_shipping_message|raw }}</h5>
+        {% endif %}
+        <input
+            id="{{ address.prefix }}_shipping_service_description"
+            type="hidden"
+            name="{{ address.prefix }}_shipping_service_description"
+            value="{{ address.shipping_service_description }}"
+        />
+        <input
+            id="{{ address.prefix }}_shipping_service_signature"
+            type="hidden"
+            name="{{ address.prefix }}_shipping_service_signature"
+            value="{{ address.shipping_service_signature }}"
+        />
+        <input
+            id="{{ address.prefix }}_subtotal"
+            type="hidden"
+            name="{{ address.prefix }}_subtotal"
+            value="{{ address.total_item_price }}"
+        />
+        <input
+            id="{{ address.prefix }}_shipping_total"
+            type="hidden"
+            name="{{ address.prefix }}_shipping_total"
+            value="{{ address.total_shipping }}"
+        />
+        <input
+            id="{{ address.prefix }}_total_future_shipping"
+            type="hidden"
+            name="{{ address.prefix }}_total_future_shipping"
+            value="{{ address.total_future_shipping }}"
+        />
+        <input
+            id="{{ address.prefix }}_tax_total"
+            type="hidden"
+            name="{{ address.prefix }}_tax_total"
+            value="{{ address.total_tax }}"
+        />
+        <input
+            id="{{ address.prefix }}_total_future_tax"
+            type="hidden"
+            name="{{ address.prefix }}_total_future_tax"
+            value="{{ address.total_future_tax }}"
+        />
+        <input
+            id="{{ address.prefix }}_total"
+            type="hidden"
+            name="{{ address.prefix }}_total"
+            value="{{ address.total_price }}"
+        />
+        {% set error_string = utils.get_error_string(address.prefix~'-results',messages.errors) %}
+        {% if error_string %}
+        <div class="fc-alert fc-alert--danger">
+            {{ error_string }}
+        </div>
+        {% endif %}
+        </div>
+
+        {% if address.custom_fields_template %}
+            {% include template_from_string(address.custom_fields_template) with address %}
+        {% endif %}
+
+    {% endif %}
+</fieldset>
