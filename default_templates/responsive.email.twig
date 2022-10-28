@@ -1,5 +1,5 @@
 {% if purchase_order %}
-    {% set custom_purchase_order_message = '<br><h2 style="margin:0;padding:0;font-family:Verdana,Helvetica,Arial,sans-serif;color:#666666;font-weight:normal;font-size:18px;margin-bottom:10px">PAY BY CHECK</h2><p style="margin-top:0; margin-bottom:30px"><span style="text-decoration: underline;">Please send payment to</span>:<br />CK6 Consulting<br />358 Laguna Madre Rd.<br />Maxwell, NM 87728<br /><br /> <span style="color: red;">Note! You order will not ship until payment has cleared.</span></p>' %}
+    {% set custom_purchase_order_message = '<br><h2 style="margin:0;padding:0;font-family:Verdana,Helvetica,Arial,sans-serif;color:#666666;font-weight:normal;font-size:18px;margin-bottom:10px">PAY BY CHECK</h2><p style="margin-top:0; margin-bottom:30px"><span style="text-decoration: underline;">Please send payment to</span>:<br />CK6 Source<br />358 Laguna Madre Rd.<br />Maxwell, NM 87728<br /><br /> <span style="color: red;">Note! You order will not ship until payment has cleared.</span></p>' %}
     {% set custom_lang = config.lang|merge({ "email_html_message_order": config.lang.email_html_message_order ~ custom_purchase_order_message }) %}
     {% set config = config|merge({"lang": custom_lang }) %}
 {% endif %}
