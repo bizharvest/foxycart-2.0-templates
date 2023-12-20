@@ -1,5 +1,5 @@
 {% if purchase_order %}
-    {% set custom_purchase_order_message = '<br><br><h4>PAY BY CHECK</h4><p><span style="text-decoration: underline;">Please send payment to</span>:<br />CK6 Source<br />358 Laguna Madre Rd.<br />Maxwell, NM 87728<br /><br /> <span style="color: red;">Note! You order will not ship until payment has cleared.</span></p>' %}
+    {% set custom_purchase_order_message = '<br><br><h4>PAY BY CHECK</h4><p><span style="text-decoration: underline;">Please send payment to</span>:<br />CK6 Consulting<br />358 Laguna Madre Rd.<br />Maxwell, NM 87728<br /><br /> <span style="color: red;">Note! You order will not ship until payment has cleared.</span></p>' %}
     {% set custom_lang = config.lang|merge({ "receipt_message_order": config.lang.receipt_message_order ~ custom_purchase_order_message }) %}
     {% set config = config|merge({"lang": custom_lang }) %}
 {% endif %}
