@@ -45,12 +45,22 @@
 {% import "utils.inc.twig" as utils %}
 {% embed 'checkout.inc.twig' %}
     {% block login_register %}
-        <fieldset id="fc-message">
-            <div class="col-12 alert alert-danger text-center">
-                <h3 class="text-info font-weight-bold">Ordering Semen? Shipping Not Included</h3>
-                <p>Please contact Lookout Mountain Genetics, LLC at 256-845-2530 to arrange and pay for shipping.</p>
-            </div>
-        </fieldset>
+        {% set break = false %}
+        {% set has_semen = false %}
+        {% for item in items if not break %}
+            {% if item.category == 'Semen' %}
+                {% set has_semen = true %}
+                {% set break = true %}
+            {% endif %}
+        {% endfor %}
+        {% if has_semen %}
+            <fieldset id="fc-message">
+                <div class="col-12 alert alert-info text-center">
+                    <h3 class="text-dark font-weight-bold">Ordering Semen? Shipping Not Included</h3>
+                    <p>Please contact Lookout Mountain Genetics, LLC at 256-845-2530 to arrange and pay for shipping.</p>
+                </div>
+            </fieldset>
+        {% endif %}
         {{ parent() }}
     {% endblock %}
     {% block payment_method %}
