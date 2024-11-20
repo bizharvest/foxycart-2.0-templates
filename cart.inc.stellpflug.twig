@@ -228,12 +228,12 @@
                             <ul class="fc-cart__item__options">
                                 {% if show_product_options %}
                                     {% for option in item.options %}
-                                        {% if 1 = 1 or ((option.name|lower not in hidden_product_options) and (option.class|lower not in hidden_product_options)) %}
+                                        {# % if ((option.name|lower not in hidden_product_options) and (option.class|lower not in hidden_product_options)) %} #}
                                         <li class="fc-cart__item__option fc-cart__item__option__{{ option.class }}">
                                             <span class="fc-cart__item__option__name">{{ option.name }}</span>:
                                             <span class="fc-cart__item__option__value">{{ option.value }}</span>
                                         </li>
-                                        {% endif %}
+                                        {# % endif %#}
                                     {% endfor %}
                                 {% endif %}
 
