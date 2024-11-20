@@ -38,6 +38,10 @@
     <div id="fc-receipt__section--receipt_messaging_and_actions">
         {% block messaging %}
         <div id="fc-messages" class="fc-receipt__section">
+            <div class="fc-alert fc-alert--success">
+                <h3>Ordering Semen?</h3>
+                <p>Shipping is not included and will be arranged with stud.</p>
+            </div>
             {% if is_updateinfo %}
             <div class="fc-alert fc-alert--success">
                 {{ config.lang.checkout_updateinfo_completed|raw }}
