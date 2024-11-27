@@ -1,6 +1,14 @@
+Thank you for purchasing our genetics
 
-Shipping Not Included
-Please check for contact information with each item to arrange shipping.
+{% for item in items %}
+    {{ item.name|upper|pad(60,"-"," ") }}
+    {% for option in item.options %}
+        {% if (option.name|lower in ["note"]) %}
+          * {{ option.value }}|pad(15)
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
 
 ===========================================================
 {% if is_updateinfo %}
